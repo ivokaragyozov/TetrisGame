@@ -348,7 +348,13 @@ class GamePlay:
 			self.remove_full_lines()
 			self.draw()
 
-		# self.draw_game_over()
+		self.draw_game_over()
+
+		while True:
+			events = pygame.event.get()
+			for event in events:
+			    if event.type == pygame.KEYDOWN:
+			        exit()
 
 	def draw(self):
 		self.draw_board()
@@ -463,6 +469,27 @@ class GamePlay:
 						return True
 
 		return False
+
+	def draw_game_over(self):
+		pygame.draw.rect(self.screen, config['non_board_part_color'], 
+			(self.non_board_part[0], self.non_board_part[1], config['square_size'] * 5, config['square_size'] * config['rows']), 0)
+
+		pygame.draw.rect(self.screen, (255, 255, 255), 
+			(0, 0, config['columns'] * config['square_size'], config['rows'] * config['square_size']), 0)
+
+		pygame.font.init()
+		myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
+		game_over_surface = myfont.render('Game Over! :(', False, (255, 0, 0))
+		self.screen.blit(game_over_surface, 
+			(config['square_size'] * (config['columns'] // 2 - 2), config['square_size'] * (config['rows'] // 2)))
+
+		myfont = pygame.font.SysFont('Comic Sans MS', 20)
+		score_surface = myfont.render('Your score is: ' + str(self.score), False, (0, 255, 0))
+		self.screen.blit(score_surface, 
+			(config['square_size'] * (config['columns'] // 2 - 2), config['square_size'] * (config['rows'] // 2 + 1)))
+
+		pygame.display.update()
 
 	def draw_non_board_part(self):
 		pygame.draw.rect(self.screen, config['non_board_part_color'], 
